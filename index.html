@@ -292,6 +292,42 @@
             line-height: 1.8;
         }
         
+        /* NSFW badge styles */
+        .nsfw-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .nsfw-true {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: var(--accent-red);
+        }
+        
+        .nsfw-false {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: var(--accent-green);
+        }
+        
+        .agent2-header {
+            margin-bottom: 1rem;
+        }
+        
+        .agent1-flags {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
         .error-card {
             background: rgba(239, 68, 68, 0.1);
             border: 1px solid rgba(239, 68, 68, 0.3);
@@ -321,6 +357,76 @@
             text-align: center;
         }
         
+        /* Cost tracking styles */
+        .cost-card {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        
+        .cost-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .cost-item {
+            background: var(--bg-dark);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .cost-item-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        
+        .cost-item-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .cost-item-value.tokens {
+            color: var(--accent-cyan);
+        }
+        
+        .cost-item-value.usd {
+            color: var(--accent-amber);
+        }
+        
+        .cost-breakdown {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .cost-breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            font-size: 0.875rem;
+        }
+        
+        .cost-breakdown-row .agent-name {
+            color: var(--text-secondary);
+        }
+        
+        .cost-breakdown-row .agent-cost {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-primary);
+        }
+        
+        .cost-breakdown-row .tokens-detail {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-left: 0.5rem;
+        }
+        
         footer {
             text-align: center;
             padding: 2rem;
@@ -335,6 +441,224 @@
         
         footer a:hover {
             text-decoration: underline;
+        }
+        
+        /* Raw Output Panel */
+        .raw-panel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+        
+        .raw-panel-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .raw-panel {
+            position: fixed;
+            top: 0;
+            right: -500px;
+            width: 500px;
+            max-width: 90vw;
+            height: 100vh;
+            background: var(--bg-card);
+            border-left: 1px solid var(--border);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.3);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .raw-panel.visible {
+            right: 0;
+        }
+        
+        .raw-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-dark);
+        }
+        
+        .raw-panel-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .raw-panel-header .step-indicator {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .raw-panel-close {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .raw-panel-close:hover {
+            background: var(--bg-input);
+            color: var(--text-primary);
+            border-color: var(--accent-blue);
+        }
+        
+        .raw-panel-content {
+            flex: 1;
+            overflow: auto;
+            padding: 1.5rem;
+        }
+        
+        .raw-panel-content pre {
+            background: var(--bg-dark);
+            margin: 0;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        
+        .raw-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .raw-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .raw-section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .raw-section-icon {
+            font-size: 1rem;
+        }
+        
+        .raw-section-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .raw-section-title.request {
+            color: var(--accent-cyan);
+        }
+        
+        .raw-section-title.response {
+            color: var(--accent-green);
+        }
+        
+        .raw-section pre {
+            border-radius: 8px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+        }
+        
+        .raw-panel-actions {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg-dark);
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .btn-copy {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        
+        .btn-copy:hover {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+        }
+        
+        .btn-copy.copied {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: white;
+        }
+        
+        /* View Raw Button */
+        .btn-view-raw {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin-left: auto;
+        }
+        
+        .btn-view-raw:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+        
+        .btn-view-raw:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        
+        .result-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
     </style>
 </head>
@@ -385,9 +709,12 @@
                 <div class="result-header">
                     <span class="step-badge">Step 1</span>
                     <h3>Agent 1: Image Extractor</h3>
+                    <button class="btn-view-raw" id="viewRawAgent1" disabled data-step="1" data-title="Agent 1: Image Extractor">
+                        <span>{ }</span> View Raw
+                    </button>
                 </div>
                 <div class="result-body">
-                    <pre id="agent1Output">Not run yet</pre>
+                    <div id="agent1Output"><div class="not-run">Not run yet</div></div>
                 </div>
             </div>
             
@@ -396,6 +723,9 @@
                 <div class="result-header">
                     <span class="step-badge">Step 2</span>
                     <h3>Safety Gate</h3>
+                    <button class="btn-view-raw" id="viewRawGate" disabled data-step="2" data-title="Safety Gate Decision">
+                        <span>{ }</span> View Raw
+                    </button>
                 </div>
                 <div class="result-body" id="gateOutput">
                     <div class="not-run">Not run yet</div>
@@ -407,9 +737,43 @@
                 <div class="result-header">
                     <span class="step-badge">Step 3</span>
                     <h3>Agent 2: Wan 2.2 Prompt Enhancer</h3>
+                    <button class="btn-view-raw" id="viewRawAgent2" disabled data-step="3" data-title="Agent 2: Prompt Enhancer">
+                        <span>{ }</span> View Raw
+                    </button>
                 </div>
                 <div class="result-body" id="agent2Output">
                     <div class="not-run">Not run yet</div>
+                </div>
+            </div>
+            
+            <!-- Cost Summary -->
+            <div class="result-card cost-card" id="costCard" style="display: none;">
+                <div class="result-header">
+                    <span class="step-badge" style="background: rgba(245, 158, 11, 0.15); color: var(--accent-amber);">💰 Costs</span>
+                    <h3>API Usage & Costs</h3>
+                </div>
+                <div class="result-body">
+                    <div class="cost-summary">
+                        <div class="cost-item">
+                            <div class="cost-item-label">Total Tokens</div>
+                            <div class="cost-item-value tokens" id="totalTokens">-</div>
+                        </div>
+                        <div class="cost-item">
+                            <div class="cost-item-label">Input Tokens</div>
+                            <div class="cost-item-value tokens" id="inputTokens">-</div>
+                        </div>
+                        <div class="cost-item">
+                            <div class="cost-item-label">Output Tokens</div>
+                            <div class="cost-item-value tokens" id="outputTokens">-</div>
+                        </div>
+                        <div class="cost-item">
+                            <div class="cost-item-label">Total Cost</div>
+                            <div class="cost-item-value usd" id="totalCost">-</div>
+                        </div>
+                    </div>
+                    <div class="cost-breakdown" id="costBreakdown">
+                        <!-- Filled by JavaScript -->
+                    </div>
                 </div>
             </div>
         </section>
@@ -417,6 +781,27 @@
         <footer>
             PoC using <a href="https://docs.x.ai" target="_blank">xAI Grok API</a>
         </footer>
+    </div>
+    
+    <!-- Raw Output Panel -->
+    <div class="raw-panel-overlay" id="rawPanelOverlay"></div>
+    <div class="raw-panel" id="rawPanel">
+        <div class="raw-panel-header">
+            <h3>
+                <span class="step-indicator" id="panelStepIndicator">Step 1</span>
+                <span id="panelTitle">Raw Output</span>
+            </h3>
+            <button class="raw-panel-close" id="rawPanelClose" title="Close">×</button>
+        </div>
+        <div class="raw-panel-content">
+            <pre id="rawPanelContent">No data</pre>
+        </div>
+        <div class="raw-panel-actions">
+            <button class="btn-copy" id="copyRawBtn">
+                <span id="copyIcon">📋</span>
+                <span id="copyText">Copy to Clipboard</span>
+            </button>
+        </div>
     </div>
     
     <script>
@@ -434,6 +819,35 @@
         const agent1Output = document.getElementById('agent1Output');
         const gateOutput = document.getElementById('gateOutput');
         const agent2Output = document.getElementById('agent2Output');
+        const costCard = document.getElementById('costCard');
+        const totalTokens = document.getElementById('totalTokens');
+        const inputTokens = document.getElementById('inputTokens');
+        const outputTokens = document.getElementById('outputTokens');
+        const totalCost = document.getElementById('totalCost');
+        const costBreakdown = document.getElementById('costBreakdown');
+        
+        // Raw panel elements
+        const rawPanel = document.getElementById('rawPanel');
+        const rawPanelOverlay = document.getElementById('rawPanelOverlay');
+        const rawPanelClose = document.getElementById('rawPanelClose');
+        const rawPanelContent = document.getElementById('rawPanelContent');
+        const panelTitle = document.getElementById('panelTitle');
+        const panelStepIndicator = document.getElementById('panelStepIndicator');
+        const copyRawBtn = document.getElementById('copyRawBtn');
+        const copyIcon = document.getElementById('copyIcon');
+        const copyText = document.getElementById('copyText');
+        
+        // Store raw data for each step
+        let rawData = {
+            agent1: null,
+            gate: null,
+            agent2: null
+        };
+        
+        // View Raw buttons
+        const viewRawAgent1 = document.getElementById('viewRawAgent1');
+        const viewRawGate = document.getElementById('viewRawGate');
+        const viewRawAgent2 = document.getElementById('viewRawAgent2');
         
         // File upload handling
         fileUpload.addEventListener('click', () => imageInput.click());
@@ -488,9 +902,11 @@
             
             // UI state: loading
             setLoading(true);
+            resetRawData();
             resultsSection.classList.add('visible');
             errorCard.style.display = 'none';
-            agent1Output.textContent = 'Processing...';
+            costCard.style.display = 'none';
+            agent1Output.innerHTML = '<div class="not-run">Processing...</div>';
             gateOutput.innerHTML = '<div class="not-run">Waiting for Agent 1...</div>';
             agent2Output.innerHTML = '<div class="not-run">Waiting for gate...</div>';
             
@@ -511,8 +927,32 @@
                     return;
                 }
                 
-                // Display Agent 1 result
-                agent1Output.textContent = JSON.stringify(data.agent1_result, null, 2);
+                // Store raw data (including full request/response details) and enable view buttons
+                rawData.agent1 = data.agent1_details || { response: { parsed: data.agent1_result } };
+                viewRawAgent1.disabled = false;
+                
+                rawData.gate = data.gate_details || { decision: data.gate_decision };
+                viewRawGate.disabled = false;
+                
+                // Display Agent 1 result with NSFW badge
+                const agent1 = data.agent1_result;
+                const agent1NsfwBadge = agent1.nsfw 
+                    ? '<span class="nsfw-badge nsfw-true">🔞 NSFW</span>' 
+                    : '<span class="nsfw-badge nsfw-false">✓ SFW</span>';
+                const minorBadge = agent1.minor_under_16 === 'no'
+                    ? '<span class="nsfw-badge nsfw-false">✓ No Minors</span>'
+                    : agent1.minor_under_16 === 'yes'
+                    ? '<span class="nsfw-badge nsfw-true">⚠️ Minor Detected</span>'
+                    : '<span class="nsfw-badge" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: var(--accent-amber);">⚠️ Unclear</span>';
+                
+                agent1Output.innerHTML = `
+                    <div class="agent1-flags">
+                        ${agent1NsfwBadge}
+                        ${minorBadge}
+                        <span class="nsfw-badge" style="background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.4); color: var(--accent-blue);">👥 ${agent1.people_count} ${agent1.people_count === 1 ? 'person' : 'people'}</span>
+                    </div>
+                    <div class="description-text" style="margin-top: 0.75rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">${escapeHtml(agent1.description || '')}</div>
+                `;
                 
                 // Display Gate decision
                 const gate = data.gate_decision;
@@ -538,11 +978,26 @@
                     `;
                 }
                 
-                // Display Agent 2 result
+                // Display Agent 2 result (now JSON with {prompt, nsfw})
                 if (data.agent2_result) {
-                    agent2Output.innerHTML = `<div class="enhanced-prompt">${escapeHtml(data.agent2_result)}</div>`;
+                    rawData.agent2 = data.agent2_details || { response: { parsed: data.agent2_result } };
+                    viewRawAgent2.disabled = false;
+                    
+                    const agent2 = data.agent2_result;
+                    const nsfwBadge = agent2.nsfw 
+                        ? '<span class="nsfw-badge nsfw-true">🔞 NSFW</span>' 
+                        : '<span class="nsfw-badge nsfw-false">✓ SFW</span>';
+                    agent2Output.innerHTML = `
+                        <div class="agent2-header">${nsfwBadge}</div>
+                        <div class="enhanced-prompt">${escapeHtml(agent2.prompt || '')}</div>
+                    `;
                 } else {
                     agent2Output.innerHTML = '<div class="not-run">Skipped — gate blocked the request</div>';
+                }
+                
+                // Display cost information
+                if (data.costs) {
+                    displayCosts(data.costs);
                 }
                 
             } catch (err) {
@@ -562,15 +1017,210 @@
             resultsSection.classList.add('visible');
             errorCard.style.display = 'block';
             errorMessage.textContent = message;
-            agent1Output.textContent = 'Failed';
+            agent1Output.innerHTML = '<div class="not-run">Failed</div>';
             gateOutput.innerHTML = '<div class="not-run">Failed</div>';
             agent2Output.innerHTML = '<div class="not-run">Failed</div>';
+            resetRawData();
         }
         
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+        
+        function displayCosts(costs) {
+            costCard.style.display = 'block';
+            
+            // Update summary values
+            totalTokens.textContent = costs.total.total_tokens.toLocaleString();
+            inputTokens.textContent = costs.total.input_tokens.toLocaleString();
+            outputTokens.textContent = costs.total.output_tokens.toLocaleString();
+            totalCost.textContent = '$' + costs.total.total_cost_usd.toFixed(6);
+            
+            // Build breakdown
+            let breakdownHtml = '';
+            
+            if (costs.agent1) {
+                breakdownHtml += `
+                    <div class="cost-breakdown-row">
+                        <span class="agent-name">Agent 1 (${costs.agent1.model})</span>
+                        <span>
+                            <span class="agent-cost">$${costs.agent1.total_cost_usd.toFixed(6)}</span>
+                            <span class="tokens-detail">${costs.agent1.input_tokens} in / ${costs.agent1.output_tokens} out</span>
+                        </span>
+                    </div>
+                `;
+            }
+            
+            if (costs.agent2) {
+                breakdownHtml += `
+                    <div class="cost-breakdown-row">
+                        <span class="agent-name">Agent 2 (${costs.agent2.model})</span>
+                        <span>
+                            <span class="agent-cost">$${costs.agent2.total_cost_usd.toFixed(6)}</span>
+                            <span class="tokens-detail">${costs.agent2.input_tokens} in / ${costs.agent2.output_tokens} out</span>
+                        </span>
+                    </div>
+                `;
+            } else {
+                breakdownHtml += `
+                    <div class="cost-breakdown-row">
+                        <span class="agent-name">Agent 2</span>
+                        <span class="agent-cost" style="color: var(--text-secondary);">Skipped</span>
+                    </div>
+                `;
+            }
+            
+            costBreakdown.innerHTML = breakdownHtml;
+        }
+        
+        // ==================== Raw Panel Functions ====================
+        
+        function openRawPanel(step, title, data) {
+            panelStepIndicator.textContent = `Step ${step}`;
+            panelTitle.textContent = title;
+            
+            // Format content with request and response sections
+            let html = '';
+            
+            if (data.request) {
+                html += `
+                    <div class="raw-section">
+                        <div class="raw-section-header">
+                            <span class="raw-section-icon">📤</span>
+                            <span class="raw-section-title request">Request Sent</span>
+                        </div>
+                        <pre>${escapeHtml(JSON.stringify(data.request, null, 2))}</pre>
+                    </div>
+                `;
+            }
+            
+            if (data.response) {
+                html += `
+                    <div class="raw-section">
+                        <div class="raw-section-header">
+                            <span class="raw-section-icon">📥</span>
+                            <span class="raw-section-title response">Response Received</span>
+                        </div>
+                        <pre>${escapeHtml(JSON.stringify(data.response, null, 2))}</pre>
+                    </div>
+                `;
+            }
+            
+            // For gate, show different format
+            if (data.rule) {
+                html = `
+                    <div class="raw-section">
+                        <div class="raw-section-header">
+                            <span class="raw-section-icon">⚙️</span>
+                            <span class="raw-section-title request">Gate Configuration</span>
+                        </div>
+                        <pre>${escapeHtml(JSON.stringify({ rule: data.rule, input_value: data.input_value }, null, 2))}</pre>
+                    </div>
+                    <div class="raw-section">
+                        <div class="raw-section-header">
+                            <span class="raw-section-icon">📋</span>
+                            <span class="raw-section-title response">Decision Output</span>
+                        </div>
+                        <pre>${escapeHtml(JSON.stringify(data.decision, null, 2))}</pre>
+                    </div>
+                `;
+            }
+            
+            // Fallback: just show the raw data
+            if (!html) {
+                html = `<pre>${escapeHtml(JSON.stringify(data, null, 2))}</pre>`;
+            }
+            
+            rawPanelContent.innerHTML = html;
+            currentPanelData = data;  // Store for copy function
+            rawPanel.classList.add('visible');
+            rawPanelOverlay.classList.add('visible');
+            document.body.style.overflow = 'hidden';
+            resetCopyButton();
+        }
+        
+        function closeRawPanel() {
+            rawPanel.classList.remove('visible');
+            rawPanelOverlay.classList.remove('visible');
+            document.body.style.overflow = '';
+            currentPanelData = null;
+        }
+        
+        function resetCopyButton() {
+            copyIcon.textContent = '📋';
+            copyText.textContent = 'Copy to Clipboard';
+            copyRawBtn.classList.remove('copied');
+        }
+        
+        // Store current panel data for copy function
+        let currentPanelData = null;
+        
+        async function copyToClipboard() {
+            try {
+                const textToCopy = currentPanelData 
+                    ? JSON.stringify(currentPanelData, null, 2)
+                    : rawPanelContent.textContent;
+                await navigator.clipboard.writeText(textToCopy);
+                copyIcon.textContent = '✓';
+                copyText.textContent = 'Copied!';
+                copyRawBtn.classList.add('copied');
+                setTimeout(resetCopyButton, 2000);
+            } catch (err) {
+                console.error('Failed to copy:', err);
+            }
+        }
+        
+        // Panel event listeners
+        rawPanelClose.addEventListener('click', closeRawPanel);
+        rawPanelOverlay.addEventListener('click', closeRawPanel);
+        copyRawBtn.addEventListener('click', copyToClipboard);
+        
+        // Escape key to close panel
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && rawPanel.classList.contains('visible')) {
+                closeRawPanel();
+            }
+        });
+        
+        // View Raw button handlers
+        viewRawAgent1.addEventListener('click', () => {
+            if (rawData.agent1) {
+                openRawPanel(
+                    viewRawAgent1.dataset.step,
+                    viewRawAgent1.dataset.title,
+                    rawData.agent1
+                );
+            }
+        });
+        
+        viewRawGate.addEventListener('click', () => {
+            if (rawData.gate) {
+                openRawPanel(
+                    viewRawGate.dataset.step,
+                    viewRawGate.dataset.title,
+                    rawData.gate
+                );
+            }
+        });
+        
+        viewRawAgent2.addEventListener('click', () => {
+            if (rawData.agent2) {
+                openRawPanel(
+                    viewRawAgent2.dataset.step,
+                    viewRawAgent2.dataset.title,
+                    rawData.agent2
+                );
+            }
+        });
+        
+        // Reset raw data and disable buttons
+        function resetRawData() {
+            rawData = { agent1: null, gate: null, agent2: null };
+            viewRawAgent1.disabled = true;
+            viewRawGate.disabled = true;
+            viewRawAgent2.disabled = true;
         }
     </script>
 </body>
