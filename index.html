@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grok Validator PoC</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-input: #1a1a24;
+            --border: #2a2a3a;
+            --text-primary: #e8e8ed;
+            --text-secondary: #8888a0;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-amber: #f59e0b;
+            --gradient-start: #3b82f6;
+            --gradient-end: #8b5cf6;
+        }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59, 130, 246, 0.15), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(139, 92, 246, 0.1), transparent);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-top: 1rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        .input-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+        
+        .file-upload {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--bg-input);
+        }
+        
+        .file-upload:hover {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        .file-upload.has-file {
+            border-color: var(--accent-green);
+            border-style: solid;
+        }
+        
+        .file-upload input {
+            display: none;
+        }
+        
+        .file-upload-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .file-upload-text {
+            color: var(--text-secondary);
+        }
+        
+        .file-name {
+            margin-top: 0.75rem;
+            color: var(--accent-cyan);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+        }
+        
+        .image-preview {
+            margin-top: 1rem;
+            max-width: 300px;
+            max-height: 200px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+            transition: border-color 0.2s ease;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+        
+        textarea::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid transparent;
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .results-section {
+            display: none;
+        }
+        
+        .results-section.visible {
+            display: block;
+        }
+        
+        .result-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .result-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .result-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .step-badge {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .result-body {
+            padding: 1.5rem;
+        }
+        
+        pre {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.25rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.7;
+        }
+        
+        .gate-result {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+        
+        .gate-passed {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--accent-green);
+        }
+        
+        .gate-blocked {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--accent-red);
+        }
+        
+        .gate-icon {
+            font-size: 1.5rem;
+        }
+        
+        .enhanced-prompt {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.25rem;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+        
+        .error-card {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .error-card h3 {
+            color: var(--accent-red);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .error-message {
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+        }
+        
+        .not-run {
+            color: var(--text-secondary);
+            font-style: italic;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        footer a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Grok Validator PoC</h1>
+            <p class="subtitle">Image Extraction → Safety Gate → Wan 2.2 Prompt Enhancement</p>
+        </header>
+        
+        <section class="input-section">
+            <form id="pipelineForm">
+                <div class="form-group">
+                    <label>Upload Image (JPEG/PNG, max 20 MiB)</label>
+                    <div class="file-upload" id="fileUpload">
+                        <input type="file" id="imageInput" accept="image/jpeg,image/png,image/jpg" required>
+                        <div class="file-upload-icon">📷</div>
+                        <div class="file-upload-text">Click or drag to upload an image</div>
+                        <div class="file-name" id="fileName"></div>
+                        <img class="image-preview" id="imagePreview" alt="Preview">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="promptInput">User Prompt</label>
+                    <textarea 
+                        id="promptInput" 
+                        placeholder="Describe what you want the video to show. E.g., 'The person walks slowly toward the camera, smiling gently, with soft wind blowing through their hair.'"
+                        required
+                    ></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="runBtn">
+                    <span id="btnText">Run Pipeline</span>
+                    <div class="spinner" id="spinner" style="display: none;"></div>
+                </button>
+            </form>
+        </section>
+        
+        <section class="results-section" id="resultsSection">
+            <div class="error-card" id="errorCard" style="display: none;">
+                <h3>⚠️ Error</h3>
+                <p class="error-message" id="errorMessage"></p>
+            </div>
+            
+            <!-- Agent 1 Result -->
+            <div class="result-card">
+                <div class="result-header">
+                    <span class="step-badge">Step 1</span>
+                    <h3>Agent 1: Image Extractor</h3>
+                </div>
+                <div class="result-body">
+                    <pre id="agent1Output">Not run yet</pre>
+                </div>
+            </div>
+            
+            <!-- Gate Decision -->
+            <div class="result-card">
+                <div class="result-header">
+                    <span class="step-badge">Step 2</span>
+                    <h3>Safety Gate</h3>
+                </div>
+                <div class="result-body" id="gateOutput">
+                    <div class="not-run">Not run yet</div>
+                </div>
+            </div>
+            
+            <!-- Agent 2 Result -->
+            <div class="result-card">
+                <div class="result-header">
+                    <span class="step-badge">Step 3</span>
+                    <h3>Agent 2: Wan 2.2 Prompt Enhancer</h3>
+                </div>
+                <div class="result-body" id="agent2Output">
+                    <div class="not-run">Not run yet</div>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            PoC using <a href="https://docs.x.ai" target="_blank">xAI Grok API</a>
+        </footer>
+    </div>
+    
+    <script>
+        const form = document.getElementById('pipelineForm');
+        const imageInput = document.getElementById('imageInput');
+        const fileUpload = document.getElementById('fileUpload');
+        const fileName = document.getElementById('fileName');
+        const imagePreview = document.getElementById('imagePreview');
+        const runBtn = document.getElementById('runBtn');
+        const btnText = document.getElementById('btnText');
+        const spinner = document.getElementById('spinner');
+        const resultsSection = document.getElementById('resultsSection');
+        const errorCard = document.getElementById('errorCard');
+        const errorMessage = document.getElementById('errorMessage');
+        const agent1Output = document.getElementById('agent1Output');
+        const gateOutput = document.getElementById('gateOutput');
+        const agent2Output = document.getElementById('agent2Output');
+        
+        // File upload handling
+        fileUpload.addEventListener('click', () => imageInput.click());
+        
+        fileUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUpload.style.borderColor = 'var(--accent-blue)';
+        });
+        
+        fileUpload.addEventListener('dragleave', () => {
+            fileUpload.style.borderColor = '';
+        });
+        
+        fileUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUpload.style.borderColor = '';
+            if (e.dataTransfer.files.length) {
+                imageInput.files = e.dataTransfer.files;
+                handleFileSelect();
+            }
+        });
+        
+        imageInput.addEventListener('change', handleFileSelect);
+        
+        function handleFileSelect() {
+            const file = imageInput.files[0];
+            if (file) {
+                fileName.textContent = file.name;
+                fileUpload.classList.add('has-file');
+                
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const image = imageInput.files[0];
+            const prompt = document.getElementById('promptInput').value.trim();
+            
+            if (!image || !prompt) {
+                showError('Please provide both an image and a prompt.');
+                return;
+            }
+            
+            // UI state: loading
+            setLoading(true);
+            resultsSection.classList.add('visible');
+            errorCard.style.display = 'none';
+            agent1Output.textContent = 'Processing...';
+            gateOutput.innerHTML = '<div class="not-run">Waiting for Agent 1...</div>';
+            agent2Output.innerHTML = '<div class="not-run">Waiting for gate...</div>';
+            
+            try {
+                const formData = new FormData();
+                formData.append('image', image);
+                formData.append('prompt', prompt);
+                
+                const response = await fetch('/run', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    showError(data.error || 'Pipeline failed');
+                    return;
+                }
+                
+                // Display Agent 1 result
+                agent1Output.textContent = JSON.stringify(data.agent1_result, null, 2);
+                
+                // Display Gate decision
+                const gate = data.gate_decision;
+                if (gate.passed) {
+                    gateOutput.innerHTML = `
+                        <div class="gate-result gate-passed">
+                            <span class="gate-icon">✅</span>
+                            <div>
+                                <strong>PASSED</strong><br>
+                                <span style="opacity: 0.8">${gate.reason}</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    gateOutput.innerHTML = `
+                        <div class="gate-result gate-blocked">
+                            <span class="gate-icon">🚫</span>
+                            <div>
+                                <strong>BLOCKED</strong><br>
+                                <span style="opacity: 0.8">${gate.reason}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Display Agent 2 result
+                if (data.agent2_result) {
+                    agent2Output.innerHTML = `<div class="enhanced-prompt">${escapeHtml(data.agent2_result)}</div>`;
+                } else {
+                    agent2Output.innerHTML = '<div class="not-run">Skipped — gate blocked the request</div>';
+                }
+                
+            } catch (err) {
+                showError(`Network error: ${err.message}`);
+            } finally {
+                setLoading(false);
+            }
+        });
+        
+        function setLoading(loading) {
+            runBtn.disabled = loading;
+            btnText.textContent = loading ? 'Running...' : 'Run Pipeline';
+            spinner.style.display = loading ? 'block' : 'none';
+        }
+        
+        function showError(message) {
+            resultsSection.classList.add('visible');
+            errorCard.style.display = 'block';
+            errorMessage.textContent = message;
+            agent1Output.textContent = 'Failed';
+            gateOutput.innerHTML = '<div class="not-run">Failed</div>';
+            agent2Output.innerHTML = '<div class="not-run">Failed</div>';
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
+
