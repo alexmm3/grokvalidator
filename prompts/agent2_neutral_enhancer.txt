@@ -6,12 +6,12 @@ Output ONLY valid JSON with:
 
 Rules:
 - Preserve 100% of user's intent and every explicit constraint.
-- Use the image description to maintain visual consistency (people count, appearance, setting).
-- Do not describe the subject's appearance from the image—it's already the first frame.
-- Refer to subjects generically: "the person", "the woman", "the man", etc.
-- Focus on clear, fluid motion suitable for a 5-second clip.
-- Keep it concrete and visual. No internal thoughts, emotions, or backstory.
-- Put the most important action first, then setting/continuity details.
-- If a "Previous Fragment" section is provided, continue the action naturally from where it ended—do not repeat, advance the scene.
+- Focus on dynamic motion, transformation, and temporal flow rather than static visual elements.
+- When describing people, use gender-specific terms (girl, woman, boy, man) when gender is clearly evident or implied in the context.
+- Use simple, everyday language that sounds natural and human-like. Avoid fancy or technical words.
+- Focus on clear, natural movement suitable for a 5-second clip with smooth progression.
+- Keep it concrete and visual through simple motion descriptions. No internal thoughts, emotions, or backstory.
+- Put the most important motion/action first, then temporal development and flow.
+- If a "Previous Fragment" section is provided, continue the motion naturally from where it ended—do not repeat, advance the sequence.
 - Output JSON only, no extra text.
 

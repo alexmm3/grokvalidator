@@ -107,15 +107,26 @@ def calculate_cost(model: str, input_tokens: int, output_tokens: int) -> dict:
 # AGENT 1: IMAGE ANALYZER
 # =============================================================================
 
-def run_agent1(client: OpenAI, image_base64: str, image_type: str) -> tuple[dict, dict, dict]:
+def run_agent1(client: OpenAI, image_base64: str, image_type: str, user_prompt: str) -> tuple[dict, dict, dict]:
     """
     Agent 1: Image Analyzer
-    Analyzes the uploaded image to extract: people_count, minor_under_16, nsfw, description.
+    Analyzes the uploaded image AND user prompt to extract: people_count, minor_under_16, nsfw, description.
     Uses vision model (grok-2-vision-1212).
+    
+    Args:
+        client: OpenAI client
+        image_base64: Base64-encoded image data
+        image_type: MIME type of the image
+        user_prompt: User's original prompt text (used for NSFW detection in text)
     
     Returns: (parsed_result, cost_info, request_details)
     """
     data_url = f"data:{image_type};base64,{image_base64}"
+    
+    # Include user prompt in the analysis request for proper NSFW routing
+    analysis_request = f"""User's prompt: "{user_prompt}"
+
+Analyze the image above and the user's prompt. Provide the JSON output as specified."""
     
     user_content = [
         {
@@ -127,7 +138,7 @@ def run_agent1(client: OpenAI, image_base64: str, image_type: str) -> tuple[dict
         },
         {
             "type": "text",
-            "text": "Analyze this image and provide the JSON output as specified."
+            "text": analysis_request
         }
     ]
     
@@ -190,7 +201,7 @@ def run_agent1(client: OpenAI, image_base64: str, image_type: str) -> tuple[dict
                                 "detail": config.IMAGE_DETAIL
                             }
                         },
-                        {"type": "text", "text": "Analyze this image and provide the JSON output as specified."}
+                        {"type": "text", "text": analysis_request}
                     ]
                 }
             ]
@@ -267,7 +278,8 @@ def build_user_message(
     user_prompt: str,
     image_description: str,
     people_count: int,
-    previous_fragment: dict = None
+    previous_fragment: dict = None,
+    is_adult: bool = False
 ) -> str:
     """
     Build the user message for Agent 2 or Agent 3.
@@ -276,15 +288,25 @@ def build_user_message(
     Args:
         user_prompt: Original user prompt
         image_description: Description from Agent 1
-        people_count: Number of people from Agent 1
+        people_count: Number of people from Agent 1 (only used for adult content)
         previous_fragment: If provided, includes continuation context
                           {"prompt": "...", "time_range": "0-5 sec"}
+        is_adult: If True (Agent 3), include people_count in message
     
     Returns: Formatted user message string
     """
-    message = f"""Image analysis:
+    # Build image analysis section
+    if is_adult:
+        # Agent 3 (adult): include people_count for proper subject reference
+        analysis_section = f"""Image analysis:
 - People count: {people_count}
-- Description: {image_description}
+- Description: {image_description}"""
+    else:
+        # Agent 2 (neutral): people_count not needed, may have no people at all
+        analysis_section = f"""Image analysis:
+- Description: {image_description}"""
+    
+    message = f"""{analysis_section}
 
 User's original prompt:
 {user_prompt}"""
@@ -326,7 +348,9 @@ def run_prompt_enhancer(
     Returns: (parsed_result, cost_info, request_details)
     """
     # Select appropriate prompt and model
-    if agent_name == "agent3":
+    is_adult = (agent_name == "agent3")
+    
+    if is_adult:
         system_prompt = get_agent3_prompt()
         model = config.AGENT3_MODEL
         agent_label = "Agent 3 (Adult)"
@@ -336,11 +360,13 @@ def run_prompt_enhancer(
         agent_label = "Agent 2 (Neutral)"
     
     # Build user message (with continuation context if Fragment 2+)
+    # people_count is only included for adult content (Agent 3)
     user_content = build_user_message(
         user_prompt, 
         image_description, 
         people_count, 
-        previous_fragment
+        previous_fragment,
+        is_adult=is_adult
     )
     
     messages = [
@@ -488,9 +514,9 @@ def run_pipeline():
             print(f"{'='*60}")
         
         # =================================================================
-        # STEP 1: Agent 1 - Image Analysis
+        # STEP 1: Agent 1 - Image Analysis (includes user prompt for NSFW routing)
         # =================================================================
-        agent1_result, agent1_cost, agent1_details = run_agent1(client, image_base64, content_type)
+        agent1_result, agent1_cost, agent1_details = run_agent1(client, image_base64, content_type, user_prompt)
         costs["agent1"] = agent1_cost
         costs["total"]["input_tokens"] += agent1_cost["input_tokens"]
         costs["total"]["output_tokens"] += agent1_cost["output_tokens"]
@@ -650,6 +676,28 @@ def get_config():
         "log_api_calls": config.LOG_API_CALLS,
         "track_costs": config.TRACK_COSTS,
         "pricing": config.MODEL_PRICING
+    })
+
+
+@app.route("/prompts", methods=["GET"])
+def get_prompts():
+    """Return current system prompts for all agents."""
+    return jsonify({
+        "agent1": {
+            "name": "Image Analyzer",
+            "model": config.AGENT1_MODEL,
+            "prompt": get_agent1_prompt()
+        },
+        "agent2": {
+            "name": "Neutral Enhancer",
+            "model": config.AGENT2_MODEL,
+            "prompt": get_agent2_prompt()
+        },
+        "agent3": {
+            "name": "Adult Enhancer",
+            "model": config.AGENT3_MODEL,
+            "prompt": get_agent3_prompt()
+        }
     })
 
 

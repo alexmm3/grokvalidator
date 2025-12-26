@@ -220,8 +220,17 @@
         
         .form-actions {
             display: flex;
-            gap: 1rem;
+            flex-direction: column;
+            gap: 1.25rem;
             align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+        }
+        
+        .form-actions .btn-primary {
+            width: 100%;
+            max-width: 300px;
+            justify-content: center;
         }
         
         .btn {
@@ -780,6 +789,482 @@
             opacity: 0.4;
             cursor: not-allowed;
         }
+        
+        /* View Prompts Button */
+        .btn-prompts {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .btn-prompts:hover {
+            background: rgba(139, 92, 246, 0.1);
+            border-color: var(--accent-purple);
+            color: var(--accent-purple);
+        }
+        
+        /* Prompts Panel (sliding from right) */
+        .prompts-panel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1999;
+        }
+        
+        .prompts-panel-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .prompts-panel {
+            position: fixed;
+            top: 0;
+            right: -550px;
+            width: 550px;
+            max-width: 90vw;
+            height: 100vh;
+            background: var(--bg-card);
+            border-left: 1px solid var(--border);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.3);
+            transition: right 0.3s ease;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .prompts-panel.visible {
+            right: 0;
+        }
+        
+        .prompts-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-dark);
+        }
+        
+        .prompts-panel-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .prompts-panel-header .prompts-indicator {
+            background: linear-gradient(135deg, var(--accent-purple), var(--gradient-end));
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .prompts-panel-close {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .prompts-panel-close:hover {
+            background: var(--bg-input);
+            color: var(--text-primary);
+            border-color: var(--accent-blue);
+        }
+        
+        .prompts-panel-content {
+            flex: 1;
+            overflow: auto;
+            padding: 1.5rem;
+        }
+        
+        .prompt-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .prompt-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .prompt-section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .prompt-agent-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .prompt-agent-badge.agent1 {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .prompt-agent-badge.agent2 {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .prompt-agent-badge.agent3 {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .prompt-section-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .prompt-model-tag {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-input);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            margin-left: auto;
+        }
+        
+        .prompt-content {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: var(--text-secondary);
+        }
+        
+        .prompts-loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Routing Tree Visualization */
+        .routing-tree-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(139, 92, 246, 0.08));
+            border: 1px solid rgba(59, 130, 246, 0.25);
+        }
+        
+        .routing-tree {
+            padding: 1rem 0;
+        }
+        
+        .tree-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            position: relative;
+        }
+        
+        .tree-node {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1.25rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            position: relative;
+            max-width: 420px;
+            width: 100%;
+        }
+        
+        .tree-node.start-node {
+            border-color: var(--accent-cyan);
+            background: rgba(6, 182, 212, 0.08);
+        }
+        
+        .tree-node.agent1-node {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.08);
+        }
+        
+        .tree-node.router-node {
+            border-color: var(--accent-purple);
+            background: rgba(139, 92, 246, 0.08);
+            border-width: 2px;
+        }
+        
+        .tree-node.agent2-node {
+            border-color: var(--accent-green);
+            background: rgba(16, 185, 129, 0.08);
+        }
+        
+        .tree-node.agent3-node {
+            border-color: var(--accent-red);
+            background: rgba(239, 68, 68, 0.08);
+        }
+        
+        .tree-node.blocked-node {
+            border-color: var(--accent-red);
+            background: rgba(239, 68, 68, 0.12);
+            border-style: dashed;
+        }
+        
+        .tree-node.result-node {
+            border-color: var(--accent-amber);
+            background: rgba(245, 158, 11, 0.08);
+        }
+        
+        .tree-node.inactive {
+            opacity: 0.35;
+            filter: grayscale(0.5);
+        }
+        
+        .tree-node.active {
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+        }
+        
+        .node-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            width: 36px;
+            text-align: center;
+        }
+        
+        .node-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .node-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            margin-bottom: 0.15rem;
+        }
+        
+        .node-detail {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+        
+        .node-trigger {
+            display: inline-block;
+            font-size: 0.65rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--accent-purple);
+            font-family: 'JetBrains Mono', monospace;
+            margin-top: 0.35rem;
+        }
+        
+        .node-trigger.green {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+        }
+        
+        .node-trigger.red {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+        }
+        
+        .tree-connector {
+            width: 2px;
+            height: 24px;
+            background: var(--border);
+            position: relative;
+        }
+        
+        .tree-connector.active {
+            background: linear-gradient(180deg, var(--accent-blue), var(--accent-purple));
+        }
+        
+        .tree-connector.green {
+            background: var(--accent-green);
+        }
+        
+        .tree-connector.red {
+            background: var(--accent-red);
+        }
+        
+        .tree-branch {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            justify-content: center;
+        }
+        
+        .tree-branch-arm {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            max-width: 300px;
+        }
+        
+        .branch-connector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 32px;
+            position: relative;
+        }
+        
+        .branch-line-horizontal {
+            position: absolute;
+            top: 0;
+            height: 2px;
+            background: var(--border);
+        }
+        
+        .branch-line-horizontal.left {
+            right: 50%;
+            width: 50%;
+        }
+        
+        .branch-line-horizontal.right {
+            left: 50%;
+            width: 50%;
+        }
+        
+        .branch-line-horizontal.active {
+            background: var(--accent-green);
+        }
+        
+        .branch-line-horizontal.active-red {
+            background: var(--accent-red);
+        }
+        
+        .branch-line-vertical {
+            width: 2px;
+            height: 100%;
+            background: var(--border);
+        }
+        
+        .branch-line-vertical.active {
+            background: var(--accent-green);
+        }
+        
+        .branch-line-vertical.active-red {
+            background: var(--accent-red);
+        }
+        
+        .branch-label {
+            position: absolute;
+            top: 6px;
+            font-size: 0.6rem;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        
+        .branch-label.left {
+            right: calc(50% + 8px);
+        }
+        
+        .branch-label.right {
+            left: calc(50% + 8px);
+        }
+        
+        .branch-label.active {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+        
+        .branch-label.active-red {
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+        }
+        
+        .tree-summary {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--border);
+            text-align: center;
+        }
+        
+        .summary-text {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        .summary-text strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        @media (max-width: 640px) {
+            .tree-branch {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .tree-branch-arm {
+                max-width: 100%;
+            }
+            
+            .branch-connector {
+                height: 24px;
+            }
+            
+            .branch-line-horizontal {
+                display: none;
+            }
+            
+            .branch-label {
+                position: static;
+                margin-bottom: 0.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -787,6 +1272,9 @@
         <header>
             <h1>Grok Validator PoC</h1>
             <p class="subtitle">Image Analysis → Content Routing → Prompt Enhancement</p>
+            <button class="btn-prompts" id="viewPromptsBtn">
+                <span>📜</span> View System Prompts
+            </button>
         </header>
         
         <section class="input-section">
@@ -875,6 +1363,19 @@
                 </div>
             </div>
             
+            <!-- Routing Tree Visualization -->
+            <div class="result-card routing-tree-card" id="routingTreeCard" style="display: none;">
+                <div class="result-header">
+                    <span class="step-badge" style="background: rgba(139, 92, 246, 0.15); color: var(--accent-purple);">🌳 Flow</span>
+                    <h3>Pipeline Routing Visualization</h3>
+                </div>
+                <div class="result-body">
+                    <div class="routing-tree" id="routingTree">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
             <!-- Cost Summary -->
             <div class="result-card cost-card" id="costCard" style="display: none;">
                 <div class="result-header">
@@ -908,6 +1409,21 @@
         <footer>
             PoC using <a href="https://docs.x.ai" target="_blank">xAI Grok API</a>
         </footer>
+    </div>
+    
+    <!-- System Prompts Panel -->
+    <div class="prompts-panel-overlay" id="promptsPanelOverlay"></div>
+    <div class="prompts-panel" id="promptsPanel">
+        <div class="prompts-panel-header">
+            <h3>
+                <span class="prompts-indicator">📜</span>
+                <span>System Prompts</span>
+            </h3>
+            <button class="prompts-panel-close" id="promptsPanelClose" title="Close">×</button>
+        </div>
+        <div class="prompts-panel-content" id="promptsPanelContent">
+            <div class="prompts-loading">Loading prompts...</div>
+        </div>
     </div>
     
     <!-- Raw Output Panel -->
@@ -947,6 +1463,8 @@
         const agent1Output = document.getElementById('agent1Output');
         const routingOutput = document.getElementById('routingOutput');
         const fragmentsOutput = document.getElementById('fragmentsOutput');
+        const routingTreeCard = document.getElementById('routingTreeCard');
+        const routingTree = document.getElementById('routingTree');
         const costCard = document.getElementById('costCard');
         
         // Duration toggle
@@ -1044,6 +1562,7 @@
             resetRawData();
             resultsSection.classList.add('visible');
             errorCard.style.display = 'none';
+            routingTreeCard.style.display = 'none';
             costCard.style.display = 'none';
             agent1Output.innerHTML = '<div class="not-run">Processing...</div>';
             routingOutput.innerHTML = '<div class="not-run">Waiting for Agent 1...</div>';
@@ -1083,6 +1602,14 @@
                 } else {
                     displayFragments(data.fragments, data.routing.agent);
                 }
+                
+                // Display routing tree visualization
+                displayRoutingTree(
+                    data.agent1_result,
+                    data.routing,
+                    data.fragments,
+                    selectedDuration
+                );
                 
                 // Display costs
                 if (data.costs) {
@@ -1257,6 +1784,140 @@
             document.getElementById('costBreakdown').innerHTML = breakdownHtml;
         }
         
+        function displayRoutingTree(agent1Result, routing, fragments, duration) {
+            routingTreeCard.style.display = 'block';
+            
+            const isBlocked = routing.agent === 'blocked';
+            const isAgent3 = routing.agent === 'agent3';
+            const isAgent2 = routing.agent === 'agent2';
+            const numFragments = fragments ? fragments.length : 0;
+            
+            // Determine triggers
+            const nsfw = agent1Result.nsfw;
+            const minorStatus = agent1Result.minor_under_16;
+            const peopleCount = agent1Result.people_count;
+            
+            // Build the tree HTML
+            let html = `
+                <div class="tree-flow">
+                    <!-- Start Node -->
+                    <div class="tree-node start-node active">
+                        <div class="node-icon">📥</div>
+                        <div class="node-content">
+                            <div class="node-title">Input Received</div>
+                            <div class="node-detail">Image + User prompt → ${duration}s video request</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tree-connector active"></div>
+                    
+                    <!-- Agent 1 Node -->
+                    <div class="tree-node agent1-node active">
+                        <div class="node-icon">🔍</div>
+                        <div class="node-content">
+                            <div class="node-title">Agent 1: Image Analyzer</div>
+                            <div class="node-detail">Vision analysis → Extract metadata</div>
+                            <div class="node-trigger">NSFW: ${nsfw ? 'true' : 'false'} | Minor: ${minorStatus} | People: ${peopleCount}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tree-connector active"></div>
+                    
+                    <!-- Router Node -->
+                    <div class="tree-node router-node active">
+                        <div class="node-icon">⚡</div>
+                        <div class="node-content">
+                            <div class="node-title">Routing Decision</div>
+                            <div class="node-detail">${routing.reason}</div>
+                            ${nsfw && !isBlocked ? `<div class="node-trigger red">NSFW=true → Safety gate check</div>` : ''}
+                            ${!nsfw ? `<div class="node-trigger green">NSFW=false → Safe path</div>` : ''}
+                            ${isBlocked ? `<div class="node-trigger red">GATE FAILED: minor_under_16="${minorStatus}"</div>` : ''}
+                        </div>
+                    </div>
+                    
+                    <!-- Branch split -->
+                    <div class="tree-branch">
+                        <!-- Left branch: Agent 2 (Neutral) -->
+                        <div class="tree-branch-arm">
+                            <div class="branch-connector">
+                                <div class="branch-line-horizontal left ${isAgent2 ? 'active' : ''}"></div>
+                                <div class="branch-line-vertical ${isAgent2 ? 'active' : ''}"></div>
+                                <span class="branch-label left ${isAgent2 ? 'active' : ''}">SFW</span>
+                            </div>
+                            <div class="tree-node agent2-node ${isAgent2 ? 'active' : 'inactive'}">
+                                <div class="node-icon">✨</div>
+                                <div class="node-content">
+                                    <div class="node-title">Agent 2: Neutral</div>
+                                    <div class="node-detail">Safe prompt enhancement</div>
+                                    ${isAgent2 ? `<div class="node-trigger green">SELECTED ✓</div>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Right branch: Agent 3 (Adult) / Blocked -->
+                        <div class="tree-branch-arm">
+                            <div class="branch-connector">
+                                <div class="branch-line-horizontal right ${isAgent3 || isBlocked ? 'active-red' : ''}"></div>
+                                <div class="branch-line-vertical ${isAgent3 || isBlocked ? 'active-red' : ''}"></div>
+                                <span class="branch-label right ${isAgent3 || isBlocked ? 'active-red' : ''}">NSFW</span>
+                            </div>
+                            ${isBlocked ? `
+                                <div class="tree-node blocked-node active">
+                                    <div class="node-icon">🚫</div>
+                                    <div class="node-content">
+                                        <div class="node-title">BLOCKED</div>
+                                        <div class="node-detail">Safety gate rejected</div>
+                                        <div class="node-trigger red">Minor detected/unclear</div>
+                                    </div>
+                                </div>
+                            ` : `
+                                <div class="tree-node agent3-node ${isAgent3 ? 'active' : 'inactive'}">
+                                    <div class="node-icon">🔞</div>
+                                    <div class="node-content">
+                                        <div class="node-title">Agent 3: Adult</div>
+                                        <div class="node-detail">Adult content enhancement</div>
+                                        ${isAgent3 ? `<div class="node-trigger red">SELECTED ✓</div>` : ''}
+                                    </div>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+            `;
+            
+            // Add result node if not blocked
+            if (!isBlocked && numFragments > 0) {
+                html += `
+                    <div class="tree-connector ${isAgent2 ? 'green' : 'red'}"></div>
+                    
+                    <div class="tree-node result-node active">
+                        <div class="node-icon">🎬</div>
+                        <div class="node-content">
+                            <div class="node-title">Output: ${numFragments} Fragment${numFragments > 1 ? 's' : ''}</div>
+                            <div class="node-detail">${duration}s video → ${numFragments}× enhanced prompts generated</div>
+                            ${numFragments > 1 ? `<div class="node-trigger">Fragment 2 uses continuation context</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += `</div>`; // Close tree-flow
+            
+            // Add summary
+            const pathTaken = isBlocked ? '❌ Input → Agent 1 → Router → BLOCKED' 
+                            : isAgent2 ? '✅ Input → Agent 1 → Router → Agent 2 → Output'
+                            : '⚠️ Input → Agent 1 → Router → Agent 3 (Adult) → Output';
+            
+            html += `
+                <div class="tree-summary">
+                    <div class="summary-text">
+                        <strong>Path taken:</strong> ${pathTaken}
+                    </div>
+                </div>
+            `;
+            
+            routingTree.innerHTML = html;
+        }
+        
         function setLoading(loading) {
             runBtn.disabled = loading;
             btnText.textContent = loading ? 'Running...' : 'Run Pipeline';
@@ -1366,9 +2027,75 @@
         rawPanelOverlay.addEventListener('click', closeRawPanel);
         copyRawBtn.addEventListener('click', copyToClipboard);
         
+        // System Prompts Panel
+        const viewPromptsBtn = document.getElementById('viewPromptsBtn');
+        const promptsPanel = document.getElementById('promptsPanel');
+        const promptsPanelOverlay = document.getElementById('promptsPanelOverlay');
+        const promptsPanelClose = document.getElementById('promptsPanelClose');
+        const promptsPanelContent = document.getElementById('promptsPanelContent');
+        
+        async function loadAndShowPrompts() {
+            promptsPanel.classList.add('visible');
+            promptsPanelOverlay.classList.add('visible');
+            document.body.style.overflow = 'hidden';
+            
+            promptsPanelContent.innerHTML = '<div class="prompts-loading">Loading prompts...</div>';
+            
+            try {
+                const response = await fetch('/prompts');
+                const data = await response.json();
+                
+                promptsPanelContent.innerHTML = `
+                    <div class="prompt-section">
+                        <div class="prompt-section-header">
+                            <span class="prompt-agent-badge agent1">Agent 1</span>
+                            <span class="prompt-section-title">${escapeHtml(data.agent1.name)}</span>
+                            <span class="prompt-model-tag">${escapeHtml(data.agent1.model)}</span>
+                        </div>
+                        <div class="prompt-content">${escapeHtml(data.agent1.prompt)}</div>
+                    </div>
+                    
+                    <div class="prompt-section">
+                        <div class="prompt-section-header">
+                            <span class="prompt-agent-badge agent2">Agent 2</span>
+                            <span class="prompt-section-title">${escapeHtml(data.agent2.name)}</span>
+                            <span class="prompt-model-tag">${escapeHtml(data.agent2.model)}</span>
+                        </div>
+                        <div class="prompt-content">${escapeHtml(data.agent2.prompt)}</div>
+                    </div>
+                    
+                    <div class="prompt-section">
+                        <div class="prompt-section-header">
+                            <span class="prompt-agent-badge agent3">Agent 3</span>
+                            <span class="prompt-section-title">${escapeHtml(data.agent3.name)}</span>
+                            <span class="prompt-model-tag">${escapeHtml(data.agent3.model)}</span>
+                        </div>
+                        <div class="prompt-content">${escapeHtml(data.agent3.prompt)}</div>
+                    </div>
+                `;
+            } catch (err) {
+                promptsPanelContent.innerHTML = `<div class="prompts-loading" style="color: var(--accent-red);">Failed to load prompts: ${escapeHtml(err.message)}</div>`;
+            }
+        }
+        
+        function closePromptsPanel() {
+            promptsPanel.classList.remove('visible');
+            promptsPanelOverlay.classList.remove('visible');
+            document.body.style.overflow = '';
+        }
+        
+        viewPromptsBtn.addEventListener('click', loadAndShowPrompts);
+        promptsPanelClose.addEventListener('click', closePromptsPanel);
+        promptsPanelOverlay.addEventListener('click', closePromptsPanel);
+        
+        // Escape key handler for all panels
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && rawPanel.classList.contains('visible')) {
-                closeRawPanel();
+            if (e.key === 'Escape') {
+                if (promptsPanel.classList.contains('visible')) {
+                    closePromptsPanel();
+                } else if (rawPanel.classList.contains('visible')) {
+                    closeRawPanel();
+                }
             }
         });
         
