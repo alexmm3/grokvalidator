@@ -20,10 +20,15 @@ GROK_BASE_URL = "https://api.x.ai/v1"
 # Options: "grok-2-vision-latest" (alias), "grok-2-vision-1212"
 AGENT1_MODEL = "grok-2-vision-1212"
 
-# Agent 2: Text generation model (text-to-text)
-# Preferred: "grok-4-1-fast-non-reasoning" (recommended for prompt enhancement tasks)
-# Options: "grok-4" (latest), "grok-4-1-fast-non-reasoning", "grok-2"
+# Agent 2: Neutral/safe prompt enhancer (text-to-text)
+# Used for non-NSFW content enhancement
+# Preferred: "grok-4-1-fast-non-reasoning" (fast, efficient for prompt tasks)
 AGENT2_MODEL = "grok-4-1-fast-non-reasoning"
+
+# Agent 3: Adult content prompt enhancer (text-to-text)
+# Used for NSFW content enhancement (only when safety gate passes)
+# Preferred: "grok-4-1-fast-non-reasoning" (same model, different system prompt)
+AGENT3_MODEL = "grok-4-1-fast-non-reasoning"
 
 # -----------------------------------------------------------------------------
 # API REQUEST PARAMETERS
@@ -41,12 +46,34 @@ AGENT1_RESPONSE_FORMAT = "json_object"
 STREAM_RESPONSES = False
 
 # =============================================================================
+# CONTENT ROUTING CONFIGURATION
+# =============================================================================
+
+# When Agent 1 detects nsfw=True, route to Agent 3 (adult enhancer)
+# When nsfw=False, route to Agent 2 (neutral enhancer)
+ROUTE_TO_ADULT_WHEN_NSFW = True
+
+# =============================================================================
 # SAFETY GATE CONFIGURATION
 # =============================================================================
 
-# Values of minor_under_16 that will PASS the gate (allow Agent 2 to run)
-# Conservative default: only "no" passes, "yes" and "unclear" both block
+# Safety gate ONLY applies to adult content (Agent 3)
+# If minor_under_16 is NOT in this list AND nsfw=True, block processing
+# Neutral content (Agent 2) bypasses the safety gate entirely
 GATE_ALLOWED_VALUES = ["no"]
+
+# =============================================================================
+# VIDEO DURATION SETTINGS
+# =============================================================================
+
+# Available video duration options (in seconds)
+VIDEO_DURATIONS = [5, 10]
+
+# Default duration if not specified
+DEFAULT_DURATION = 5
+
+# Fragment length (each fragment is 5 seconds)
+FRAGMENT_LENGTH = 5
 
 # =============================================================================
 # APPLICATION SETTINGS
@@ -75,7 +102,8 @@ ALLOWED_IMAGE_TYPES = [
 
 # Relative paths from project root to system prompt files
 AGENT1_PROMPT_FILE = "prompts/agent1_image_extractor.txt"
-AGENT2_PROMPT_FILE = "prompts/agent2_wan_enhancer.txt"
+AGENT2_PROMPT_FILE = "prompts/agent2_neutral_enhancer.txt"  # Safe/neutral content
+AGENT3_PROMPT_FILE = "prompts/agent3_adult_enhancer.txt"    # Adult content
 
 # =============================================================================
 # LOGGING / DEBUG
@@ -103,7 +131,7 @@ MODEL_PRICING = {
     },
     
     # grok-4-1-fast-non-reasoning
-    # Fast text model without reasoning - used for Agent 2 prompt enhancement
+    # Fast text model without reasoning - used for Agent 2 & 3 prompt enhancement
     "grok-4-1-fast-non-reasoning": {
         "input_per_million": 0.20,
         "output_per_million": 0.50,

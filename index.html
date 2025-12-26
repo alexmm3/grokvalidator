@@ -25,6 +25,7 @@
             --accent-green: #10b981;
             --accent-red: #ef4444;
             --accent-amber: #f59e0b;
+            --accent-purple: #8b5cf6;
             --gradient-start: #3b82f6;
             --gradient-end: #8b5cf6;
         }
@@ -74,6 +75,18 @@
             border-radius: 16px;
             padding: 2rem;
             margin-bottom: 2rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
         }
         
         .form-group {
@@ -159,6 +172,58 @@
             color: var(--text-secondary);
         }
         
+        /* Duration Toggle */
+        .duration-toggle {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .duration-toggle label {
+            margin-bottom: 0;
+            white-space: nowrap;
+        }
+        
+        .toggle-buttons {
+            display: flex;
+            gap: 0;
+            background: var(--bg-input);
+            border-radius: 10px;
+            padding: 4px;
+            border: 1px solid var(--border);
+        }
+        
+        .toggle-btn {
+            padding: 0.5rem 1.25rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .toggle-btn.active {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+        }
+        
+        .toggle-btn:not(.active):hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
         .btn {
             display: inline-flex;
             align-items: center;
@@ -242,6 +307,26 @@
             letter-spacing: 0.05em;
         }
         
+        .agent-badge {
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .agent-badge.agent2 {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .agent-badge.agent3 {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
         .result-body {
             padding: 1.5rem;
         }
@@ -257,7 +342,7 @@
             line-height: 1.7;
         }
         
-        .gate-result {
+        .routing-result {
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -266,19 +351,25 @@
             font-weight: 500;
         }
         
-        .gate-passed {
+        .routing-neutral {
             background: rgba(16, 185, 129, 0.1);
             border: 1px solid rgba(16, 185, 129, 0.3);
             color: var(--accent-green);
         }
         
-        .gate-blocked {
+        .routing-adult {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            color: var(--accent-purple);
+        }
+        
+        .routing-blocked {
             background: rgba(239, 68, 68, 0.1);
             border: 1px solid rgba(239, 68, 68, 0.3);
             color: var(--accent-red);
         }
         
-        .gate-icon {
+        .routing-icon {
             font-size: 1.5rem;
         }
         
@@ -317,8 +408,12 @@
             color: var(--accent-green);
         }
         
-        .agent2-header {
+        .fragment-header {
             margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
         
         .agent1-flags {
@@ -357,6 +452,39 @@
             text-align: center;
         }
         
+        /* Demo Note Banner */
+        .demo-note {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(239, 68, 68, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        
+        .demo-note-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        
+        .demo-note-content {
+            font-size: 0.85rem;
+            color: var(--accent-amber);
+        }
+        
+        .demo-note-content strong {
+            color: var(--accent-red);
+        }
+        
+        /* Fragment divider */
+        .fragment-divider {
+            margin: 1.5rem 0;
+            border: none;
+            border-top: 1px dashed var(--border);
+        }
+        
         /* Cost tracking styles */
         .cost-card {
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(139, 92, 246, 0.1));
@@ -365,7 +493,7 @@
         
         .cost-summary {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 1rem;
         }
         
@@ -386,7 +514,7 @@
         
         .cost-item-value {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             font-weight: 600;
         }
         
@@ -642,7 +770,7 @@
             margin-left: auto;
         }
         
-        .btn-view-raw:hover {
+        .btn-view-raw:hover:not(:disabled) {
             background: rgba(59, 130, 246, 0.1);
             border-color: var(--accent-blue);
             color: var(--accent-blue);
@@ -652,49 +780,53 @@
             opacity: 0.4;
             cursor: not-allowed;
         }
-        
-        .result-header {
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>Grok Validator PoC</h1>
-            <p class="subtitle">Image Extraction → Safety Gate → Wan 2.2 Prompt Enhancement</p>
+            <p class="subtitle">Image Analysis → Content Routing → Prompt Enhancement</p>
         </header>
         
         <section class="input-section">
             <form id="pipelineForm">
-                <div class="form-group">
-                    <label>Upload Image (JPEG/PNG, max 20 MiB)</label>
-                    <div class="file-upload" id="fileUpload">
-                        <input type="file" id="imageInput" accept="image/jpeg,image/png,image/jpg" required>
-                        <div class="file-upload-icon">📷</div>
-                        <div class="file-upload-text">Click or drag to upload an image</div>
-                        <div class="file-name" id="fileName"></div>
-                        <img class="image-preview" id="imagePreview" alt="Preview">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Upload Image (JPEG/PNG, max 20 MiB)</label>
+                        <div class="file-upload" id="fileUpload">
+                            <input type="file" id="imageInput" accept="image/jpeg,image/png,image/jpg" required>
+                            <div class="file-upload-icon">📷</div>
+                            <div class="file-upload-text">Click or drag to upload an image</div>
+                            <div class="file-name" id="fileName"></div>
+                            <img class="image-preview" id="imagePreview" alt="Preview">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="promptInput">User Prompt</label>
+                        <textarea 
+                            id="promptInput" 
+                            placeholder="Describe what you want the video to show. E.g., 'The person walks slowly toward the camera, smiling gently, with soft wind blowing through their hair.'"
+                            required
+                        ></textarea>
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="promptInput">User Prompt</label>
-                    <textarea 
-                        id="promptInput" 
-                        placeholder="Describe what you want the video to show. E.g., 'The person walks slowly toward the camera, smiling gently, with soft wind blowing through their hair.'"
-                        required
-                    ></textarea>
+                <div class="form-actions">
+                    <div class="duration-toggle">
+                        <label>Video Duration:</label>
+                        <div class="toggle-buttons">
+                            <button type="button" class="toggle-btn active" id="btn5sec" data-duration="5">5 sec</button>
+                            <button type="button" class="toggle-btn" id="btn10sec" data-duration="10">10 sec</button>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="runBtn">
+                        <span id="btnText">Run Pipeline</span>
+                        <div class="spinner" id="spinner" style="display: none;"></div>
+                    </button>
                 </div>
-                
-                <button type="submit" class="btn btn-primary" id="runBtn">
-                    <span id="btnText">Run Pipeline</span>
-                    <div class="spinner" id="spinner" style="display: none;"></div>
-                </button>
             </form>
         </section>
         
@@ -708,8 +840,8 @@
             <div class="result-card">
                 <div class="result-header">
                     <span class="step-badge">Step 1</span>
-                    <h3>Agent 1: Image Extractor</h3>
-                    <button class="btn-view-raw" id="viewRawAgent1" disabled data-step="1" data-title="Agent 1: Image Extractor">
+                    <h3>Agent 1: Image Analyzer</h3>
+                    <button class="btn-view-raw" id="viewRawAgent1" disabled>
                         <span>{ }</span> View Raw
                     </button>
                 </div>
@@ -718,30 +850,27 @@
                 </div>
             </div>
             
-            <!-- Gate Decision -->
+            <!-- Routing Decision -->
             <div class="result-card">
                 <div class="result-header">
                     <span class="step-badge">Step 2</span>
-                    <h3>Safety Gate</h3>
-                    <button class="btn-view-raw" id="viewRawGate" disabled data-step="2" data-title="Safety Gate Decision">
+                    <h3>Content Routing</h3>
+                    <button class="btn-view-raw" id="viewRawRouting" disabled>
                         <span>{ }</span> View Raw
                     </button>
                 </div>
-                <div class="result-body" id="gateOutput">
+                <div class="result-body" id="routingOutput">
                     <div class="not-run">Not run yet</div>
                 </div>
             </div>
             
-            <!-- Agent 2 Result -->
-            <div class="result-card">
+            <!-- Fragments Output -->
+            <div class="result-card" id="fragmentsCard">
                 <div class="result-header">
                     <span class="step-badge">Step 3</span>
-                    <h3>Agent 2: Wan 2.2 Prompt Enhancer</h3>
-                    <button class="btn-view-raw" id="viewRawAgent2" disabled data-step="3" data-title="Agent 2: Prompt Enhancer">
-                        <span>{ }</span> View Raw
-                    </button>
+                    <h3>Enhanced Prompts</h3>
                 </div>
-                <div class="result-body" id="agent2Output">
+                <div class="result-body" id="fragmentsOutput">
                     <div class="not-run">Not run yet</div>
                 </div>
             </div>
@@ -759,11 +888,11 @@
                             <div class="cost-item-value tokens" id="totalTokens">-</div>
                         </div>
                         <div class="cost-item">
-                            <div class="cost-item-label">Input Tokens</div>
+                            <div class="cost-item-label">Input</div>
                             <div class="cost-item-value tokens" id="inputTokens">-</div>
                         </div>
                         <div class="cost-item">
-                            <div class="cost-item-label">Output Tokens</div>
+                            <div class="cost-item-label">Output</div>
                             <div class="cost-item-value tokens" id="outputTokens">-</div>
                         </div>
                         <div class="cost-item">
@@ -771,9 +900,7 @@
                             <div class="cost-item-value usd" id="totalCost">-</div>
                         </div>
                     </div>
-                    <div class="cost-breakdown" id="costBreakdown">
-                        <!-- Filled by JavaScript -->
-                    </div>
+                    <div class="cost-breakdown" id="costBreakdown"></div>
                 </div>
             </div>
         </section>
@@ -805,6 +932,7 @@
     </div>
     
     <script>
+        // DOM Elements
         const form = document.getElementById('pipelineForm');
         const imageInput = document.getElementById('imageInput');
         const fileUpload = document.getElementById('fileUpload');
@@ -817,14 +945,14 @@
         const errorCard = document.getElementById('errorCard');
         const errorMessage = document.getElementById('errorMessage');
         const agent1Output = document.getElementById('agent1Output');
-        const gateOutput = document.getElementById('gateOutput');
-        const agent2Output = document.getElementById('agent2Output');
+        const routingOutput = document.getElementById('routingOutput');
+        const fragmentsOutput = document.getElementById('fragmentsOutput');
         const costCard = document.getElementById('costCard');
-        const totalTokens = document.getElementById('totalTokens');
-        const inputTokens = document.getElementById('inputTokens');
-        const outputTokens = document.getElementById('outputTokens');
-        const totalCost = document.getElementById('totalCost');
-        const costBreakdown = document.getElementById('costBreakdown');
+        
+        // Duration toggle
+        const btn5sec = document.getElementById('btn5sec');
+        const btn10sec = document.getElementById('btn10sec');
+        let selectedDuration = 5;
         
         // Raw panel elements
         const rawPanel = document.getElementById('rawPanel');
@@ -837,17 +965,30 @@
         const copyIcon = document.getElementById('copyIcon');
         const copyText = document.getElementById('copyText');
         
-        // Store raw data for each step
-        let rawData = {
-            agent1: null,
-            gate: null,
-            agent2: null
-        };
-        
         // View Raw buttons
         const viewRawAgent1 = document.getElementById('viewRawAgent1');
-        const viewRawGate = document.getElementById('viewRawGate');
-        const viewRawAgent2 = document.getElementById('viewRawAgent2');
+        const viewRawRouting = document.getElementById('viewRawRouting');
+        
+        // Store raw data
+        let rawData = {
+            agent1: null,
+            routing: null,
+            fragments: []
+        };
+        let currentPanelData = null;
+        
+        // Duration toggle handlers
+        btn5sec.addEventListener('click', () => {
+            selectedDuration = 5;
+            btn5sec.classList.add('active');
+            btn10sec.classList.remove('active');
+        });
+        
+        btn10sec.addEventListener('click', () => {
+            selectedDuration = 10;
+            btn10sec.classList.add('active');
+            btn5sec.classList.remove('active');
+        });
         
         // File upload handling
         fileUpload.addEventListener('click', () => imageInput.click());
@@ -878,7 +1019,6 @@
                 fileName.textContent = file.name;
                 fileUpload.classList.add('has-file');
                 
-                // Show preview
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     imagePreview.src = e.target.result;
@@ -900,20 +1040,20 @@
                 return;
             }
             
-            // UI state: loading
             setLoading(true);
             resetRawData();
             resultsSection.classList.add('visible');
             errorCard.style.display = 'none';
             costCard.style.display = 'none';
             agent1Output.innerHTML = '<div class="not-run">Processing...</div>';
-            gateOutput.innerHTML = '<div class="not-run">Waiting for Agent 1...</div>';
-            agent2Output.innerHTML = '<div class="not-run">Waiting for gate...</div>';
+            routingOutput.innerHTML = '<div class="not-run">Waiting for Agent 1...</div>';
+            fragmentsOutput.innerHTML = '<div class="not-run">Waiting for routing...</div>';
             
             try {
                 const formData = new FormData();
                 formData.append('image', image);
                 formData.append('prompt', prompt);
+                formData.append('duration', selectedDuration);
                 
                 const response = await fetch('/run', {
                     method: 'POST',
@@ -927,75 +1067,24 @@
                     return;
                 }
                 
-                // Store raw data (including full request/response details) and enable view buttons
+                // Store and display Agent 1 result
                 rawData.agent1 = data.agent1_details || { response: { parsed: data.agent1_result } };
                 viewRawAgent1.disabled = false;
+                displayAgent1(data.agent1_result);
                 
-                rawData.gate = data.gate_details || { decision: data.gate_decision };
-                viewRawGate.disabled = false;
+                // Store and display Routing decision
+                rawData.routing = data.routing;
+                viewRawRouting.disabled = false;
+                displayRouting(data.routing);
                 
-                // Display Agent 1 result with NSFW badge
-                const agent1 = data.agent1_result;
-                const agent1NsfwBadge = agent1.nsfw 
-                    ? '<span class="nsfw-badge nsfw-true">🔞 NSFW</span>' 
-                    : '<span class="nsfw-badge nsfw-false">✓ SFW</span>';
-                const minorBadge = agent1.minor_under_16 === 'no'
-                    ? '<span class="nsfw-badge nsfw-false">✓ No Minors</span>'
-                    : agent1.minor_under_16 === 'yes'
-                    ? '<span class="nsfw-badge nsfw-true">⚠️ Minor Detected</span>'
-                    : '<span class="nsfw-badge" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: var(--accent-amber);">⚠️ Unclear</span>';
-                
-                agent1Output.innerHTML = `
-                    <div class="agent1-flags">
-                        ${agent1NsfwBadge}
-                        ${minorBadge}
-                        <span class="nsfw-badge" style="background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.4); color: var(--accent-blue);">👥 ${agent1.people_count} ${agent1.people_count === 1 ? 'person' : 'people'}</span>
-                    </div>
-                    <div class="description-text" style="margin-top: 0.75rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">${escapeHtml(agent1.description || '')}</div>
-                `;
-                
-                // Display Gate decision
-                const gate = data.gate_decision;
-                if (gate.passed) {
-                    gateOutput.innerHTML = `
-                        <div class="gate-result gate-passed">
-                            <span class="gate-icon">✅</span>
-                            <div>
-                                <strong>PASSED</strong><br>
-                                <span style="opacity: 0.8">${gate.reason}</span>
-                            </div>
-                        </div>
-                    `;
+                // Display Fragments
+                if (data.blocked) {
+                    fragmentsOutput.innerHTML = '<div class="not-run">Blocked — content did not pass safety gate</div>';
                 } else {
-                    gateOutput.innerHTML = `
-                        <div class="gate-result gate-blocked">
-                            <span class="gate-icon">🚫</span>
-                            <div>
-                                <strong>BLOCKED</strong><br>
-                                <span style="opacity: 0.8">${gate.reason}</span>
-                            </div>
-                        </div>
-                    `;
+                    displayFragments(data.fragments, data.routing.agent);
                 }
                 
-                // Display Agent 2 result (now JSON with {prompt, nsfw})
-                if (data.agent2_result) {
-                    rawData.agent2 = data.agent2_details || { response: { parsed: data.agent2_result } };
-                    viewRawAgent2.disabled = false;
-                    
-                    const agent2 = data.agent2_result;
-                    const nsfwBadge = agent2.nsfw 
-                        ? '<span class="nsfw-badge nsfw-true">🔞 NSFW</span>' 
-                        : '<span class="nsfw-badge nsfw-false">✓ SFW</span>';
-                    agent2Output.innerHTML = `
-                        <div class="agent2-header">${nsfwBadge}</div>
-                        <div class="enhanced-prompt">${escapeHtml(agent2.prompt || '')}</div>
-                    `;
-                } else {
-                    agent2Output.innerHTML = '<div class="not-run">Skipped — gate blocked the request</div>';
-                }
-                
-                // Display cost information
+                // Display costs
                 if (data.costs) {
                     displayCosts(data.costs);
                 }
@@ -1007,38 +1096,136 @@
             }
         });
         
-        function setLoading(loading) {
-            runBtn.disabled = loading;
-            btnText.textContent = loading ? 'Running...' : 'Run Pipeline';
-            spinner.style.display = loading ? 'block' : 'none';
+        function displayAgent1(agent1) {
+            const nsfwBadge = agent1.nsfw 
+                ? '<span class="nsfw-badge nsfw-true">🔞 NSFW</span>' 
+                : '<span class="nsfw-badge nsfw-false">✓ SFW</span>';
+            const minorBadge = agent1.minor_under_16 === 'no'
+                ? '<span class="nsfw-badge nsfw-false">✓ No Minors</span>'
+                : agent1.minor_under_16 === 'yes'
+                ? '<span class="nsfw-badge nsfw-true">⚠️ Minor Detected</span>'
+                : '<span class="nsfw-badge" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: var(--accent-amber);">⚠️ Unclear</span>';
+            
+            agent1Output.innerHTML = `
+                <div class="agent1-flags">
+                    ${nsfwBadge}
+                    ${minorBadge}
+                    <span class="nsfw-badge" style="background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.4); color: var(--accent-blue);">👥 ${agent1.people_count} ${agent1.people_count === 1 ? 'person' : 'people'}</span>
+                </div>
+                <div style="margin-top: 0.75rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">${escapeHtml(agent1.description || '')}</div>
+            `;
         }
         
-        function showError(message) {
-            resultsSection.classList.add('visible');
-            errorCard.style.display = 'block';
-            errorMessage.textContent = message;
-            agent1Output.innerHTML = '<div class="not-run">Failed</div>';
-            gateOutput.innerHTML = '<div class="not-run">Failed</div>';
-            agent2Output.innerHTML = '<div class="not-run">Failed</div>';
-            resetRawData();
+        function displayRouting(routing) {
+            const isBlocked = routing.agent === 'blocked';
+            const isAdult = routing.agent === 'agent3';
+            
+            let cssClass, icon, label;
+            if (isBlocked) {
+                cssClass = 'routing-blocked';
+                icon = '🚫';
+                label = 'BLOCKED';
+            } else if (isAdult) {
+                cssClass = 'routing-adult';
+                icon = '🔞';
+                label = 'ADULT CONTENT → Agent 3';
+            } else {
+                cssClass = 'routing-neutral';
+                icon = '✅';
+                label = 'SAFE CONTENT → Agent 2';
+            }
+            
+            let gateInfo = '';
+            if (routing.gate_applied) {
+                gateInfo = `<br><span style="opacity: 0.7; font-size: 0.85rem;">Safety gate: ${routing.gate_passed ? 'PASSED' : 'FAILED'}</span>`;
+            }
+            
+            routingOutput.innerHTML = `
+                <div class="routing-result ${cssClass}">
+                    <span class="routing-icon">${icon}</span>
+                    <div>
+                        <strong>${label}</strong>${gateInfo}<br>
+                        <span style="opacity: 0.8">${routing.reason}</span>
+                    </div>
+                </div>
+            `;
         }
         
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+        function displayFragments(fragments, agentUsed) {
+            if (!fragments || fragments.length === 0) {
+                fragmentsOutput.innerHTML = '<div class="not-run">No fragments generated</div>';
+                return;
+            }
+            
+            rawData.fragments = fragments.map(f => f.details);
+            
+            let html = '';
+            
+            fragments.forEach((fragment, idx) => {
+                const isAgent3 = fragment.agent_used === 'agent3';
+                const agentBadge = isAgent3 
+                    ? '<span class="agent-badge agent3">Agent 3 (Adult)</span>'
+                    : '<span class="agent-badge agent2">Agent 2 (Neutral)</span>';
+                const nsfwBadge = fragment.result.nsfw 
+                    ? '<span class="nsfw-badge nsfw-true">🔞 NSFW</span>' 
+                    : '<span class="nsfw-badge nsfw-false">✓ SFW</span>';
+                
+                if (idx > 0) {
+                    html += '<hr class="fragment-divider">';
+                }
+                
+                // Demo note for Fragment 2+
+                let demoNote = '';
+                if (fragment._demo_note) {
+                    demoNote = `
+                        <div class="demo-note">
+                            <span class="demo-note-icon">⚠️</span>
+                            <div class="demo-note-content">
+                                <strong>DEMO MODE:</strong> Using same uploaded image.<br>
+                                <strong>PRODUCTION:</strong> Should use the last frame of the previously generated video fragment as the first frame for this fragment.
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                html += `
+                    <div class="fragment-item" data-index="${idx}">
+                        <div class="fragment-header">
+                            <span class="step-badge" style="background: rgba(139, 92, 246, 0.15); color: var(--accent-purple);">Fragment ${fragment.fragment_number}</span>
+                            <span style="color: var(--text-secondary); font-size: 0.85rem;">${fragment.time_range}</span>
+                            ${agentBadge}
+                            ${nsfwBadge}
+                            <button class="btn-view-raw view-raw-fragment" data-index="${idx}">
+                                <span>{ }</span> View Raw
+                            </button>
+                        </div>
+                        ${demoNote}
+                        <div class="enhanced-prompt">${escapeHtml(fragment.result.prompt || '')}</div>
+                    </div>
+                `;
+            });
+            
+            fragmentsOutput.innerHTML = html;
+            
+            // Attach event listeners to fragment view raw buttons
+            document.querySelectorAll('.view-raw-fragment').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const idx = parseInt(btn.dataset.index);
+                    if (rawData.fragments[idx]) {
+                        openRawPanel(`3.${idx + 1}`, `Fragment ${idx + 1}`, rawData.fragments[idx]);
+                    }
+                });
+            });
         }
         
         function displayCosts(costs) {
             costCard.style.display = 'block';
             
-            // Update summary values
-            totalTokens.textContent = costs.total.total_tokens.toLocaleString();
-            inputTokens.textContent = costs.total.input_tokens.toLocaleString();
-            outputTokens.textContent = costs.total.output_tokens.toLocaleString();
-            totalCost.textContent = '$' + costs.total.total_cost_usd.toFixed(6);
+            document.getElementById('totalTokens').textContent = costs.total.total_tokens.toLocaleString();
+            document.getElementById('inputTokens').textContent = costs.total.input_tokens.toLocaleString();
+            document.getElementById('outputTokens').textContent = costs.total.output_tokens.toLocaleString();
+            document.getElementById('totalCost').textContent = '$' + costs.total.total_cost_usd.toFixed(6);
             
-            // Build breakdown
             let breakdownHtml = '';
             
             if (costs.agent1) {
@@ -1053,35 +1240,56 @@
                 `;
             }
             
-            if (costs.agent2) {
-                breakdownHtml += `
-                    <div class="cost-breakdown-row">
-                        <span class="agent-name">Agent 2 (${costs.agent2.model})</span>
-                        <span>
-                            <span class="agent-cost">$${costs.agent2.total_cost_usd.toFixed(6)}</span>
-                            <span class="tokens-detail">${costs.agent2.input_tokens} in / ${costs.agent2.output_tokens} out</span>
-                        </span>
-                    </div>
-                `;
-            } else {
-                breakdownHtml += `
-                    <div class="cost-breakdown-row">
-                        <span class="agent-name">Agent 2</span>
-                        <span class="agent-cost" style="color: var(--text-secondary);">Skipped</span>
-                    </div>
-                `;
+            if (costs.fragments && costs.fragments.length > 0) {
+                costs.fragments.forEach((fragCost, idx) => {
+                    breakdownHtml += `
+                        <div class="cost-breakdown-row">
+                            <span class="agent-name">Fragment ${idx + 1} (${fragCost.model})</span>
+                            <span>
+                                <span class="agent-cost">$${fragCost.total_cost_usd.toFixed(6)}</span>
+                                <span class="tokens-detail">${fragCost.input_tokens} in / ${fragCost.output_tokens} out</span>
+                            </span>
+                        </div>
+                    `;
+                });
             }
             
-            costBreakdown.innerHTML = breakdownHtml;
+            document.getElementById('costBreakdown').innerHTML = breakdownHtml;
         }
         
-        // ==================== Raw Panel Functions ====================
+        function setLoading(loading) {
+            runBtn.disabled = loading;
+            btnText.textContent = loading ? 'Running...' : 'Run Pipeline';
+            spinner.style.display = loading ? 'block' : 'none';
+        }
         
+        function showError(message) {
+            resultsSection.classList.add('visible');
+            errorCard.style.display = 'block';
+            errorMessage.textContent = message;
+            agent1Output.innerHTML = '<div class="not-run">Failed</div>';
+            routingOutput.innerHTML = '<div class="not-run">Failed</div>';
+            fragmentsOutput.innerHTML = '<div class="not-run">Failed</div>';
+            resetRawData();
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function resetRawData() {
+            rawData = { agent1: null, routing: null, fragments: [] };
+            viewRawAgent1.disabled = true;
+            viewRawRouting.disabled = true;
+        }
+        
+        // Raw Panel Functions
         function openRawPanel(step, title, data) {
             panelStepIndicator.textContent = `Step ${step}`;
             panelTitle.textContent = title;
             
-            // Format content with request and response sections
             let html = '';
             
             if (data.request) {
@@ -1108,33 +1316,17 @@
                 `;
             }
             
-            // For gate, show different format
-            if (data.rule) {
-                html = `
-                    <div class="raw-section">
-                        <div class="raw-section-header">
-                            <span class="raw-section-icon">⚙️</span>
-                            <span class="raw-section-title request">Gate Configuration</span>
-                        </div>
-                        <pre>${escapeHtml(JSON.stringify({ rule: data.rule, input_value: data.input_value }, null, 2))}</pre>
-                    </div>
-                    <div class="raw-section">
-                        <div class="raw-section-header">
-                            <span class="raw-section-icon">📋</span>
-                            <span class="raw-section-title response">Decision Output</span>
-                        </div>
-                        <pre>${escapeHtml(JSON.stringify(data.decision, null, 2))}</pre>
-                    </div>
-                `;
+            // For routing, show the full object
+            if (data.agent && !data.request) {
+                html = `<pre>${escapeHtml(JSON.stringify(data, null, 2))}</pre>`;
             }
             
-            // Fallback: just show the raw data
             if (!html) {
                 html = `<pre>${escapeHtml(JSON.stringify(data, null, 2))}</pre>`;
             }
             
             rawPanelContent.innerHTML = html;
-            currentPanelData = data;  // Store for copy function
+            currentPanelData = data;
             rawPanel.classList.add('visible');
             rawPanelOverlay.classList.add('visible');
             document.body.style.overflow = 'hidden';
@@ -1154,9 +1346,6 @@
             copyRawBtn.classList.remove('copied');
         }
         
-        // Store current panel data for copy function
-        let currentPanelData = null;
-        
         async function copyToClipboard() {
             try {
                 const textToCopy = currentPanelData 
@@ -1172,57 +1361,28 @@
             }
         }
         
-        // Panel event listeners
+        // Event listeners
         rawPanelClose.addEventListener('click', closeRawPanel);
         rawPanelOverlay.addEventListener('click', closeRawPanel);
         copyRawBtn.addEventListener('click', copyToClipboard);
         
-        // Escape key to close panel
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && rawPanel.classList.contains('visible')) {
                 closeRawPanel();
             }
         });
         
-        // View Raw button handlers
         viewRawAgent1.addEventListener('click', () => {
             if (rawData.agent1) {
-                openRawPanel(
-                    viewRawAgent1.dataset.step,
-                    viewRawAgent1.dataset.title,
-                    rawData.agent1
-                );
+                openRawPanel('1', 'Agent 1: Image Analyzer', rawData.agent1);
             }
         });
         
-        viewRawGate.addEventListener('click', () => {
-            if (rawData.gate) {
-                openRawPanel(
-                    viewRawGate.dataset.step,
-                    viewRawGate.dataset.title,
-                    rawData.gate
-                );
+        viewRawRouting.addEventListener('click', () => {
+            if (rawData.routing) {
+                openRawPanel('2', 'Content Routing', rawData.routing);
             }
         });
-        
-        viewRawAgent2.addEventListener('click', () => {
-            if (rawData.agent2) {
-                openRawPanel(
-                    viewRawAgent2.dataset.step,
-                    viewRawAgent2.dataset.title,
-                    rawData.agent2
-                );
-            }
-        });
-        
-        // Reset raw data and disable buttons
-        function resetRawData() {
-            rawData = { agent1: null, gate: null, agent2: null };
-            viewRawAgent1.disabled = true;
-            viewRawGate.disabled = true;
-            viewRawAgent2.disabled = true;
-        }
     </script>
 </body>
 </html>
-
